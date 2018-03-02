@@ -69,12 +69,11 @@ add_action('admin_enqueue_scripts', 'sfpAdminScripts');
  *
  * Uses in the Booking shortcode
  *
- * @param array $params Theme's settings
  *
  * @return string
  *
  */
-function sfpBookingForm( $params_ ){
+function sfpBookingForm(){
     $spa_form = file_get_contents( SPA_BOOKING_FORM, true );
     $params   = get_option('sfp_options');
 

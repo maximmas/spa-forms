@@ -1,24 +1,17 @@
-"use strict";
-
-//console.log('Metoo');
+// "use strict";
 
 jQuery(document).ready(function($) {
 
      $('#formRes button.tester').on('click', function(e){
         e.preventDefault();
-        //let is_valid = formValidator();
-
-        let is_valid = 1;
-
+        let is_valid = formValidator();
+        // let is_valid = 1;
         if ( is_valid ){
             handlerBookingForm();            
         };
-
      });
 
-
     function formValidator() {
-
         let name_el = $( "input#input_name" ),
             email_el = $( "input#input_mail" ),
             name    = name_el.val(),
@@ -40,14 +33,17 @@ jQuery(document).ready(function($) {
 
     function handlerBookingForm() {
         let data = {
-            action: 'booking',
-            name: $( "input#input_name" ).val(),
-            email: $( "input#input_mail" ).val(),
-            date:$( "input#input_date" ).val(),
-            time:$( "input#input_time" ).val(),
-            message:$( "textarea.input_message" ).val(),
-            people: ''
-        };
+                action: 'booking',
+                name: $( "input#input_name" ).val(),
+                email: $( "input#input_mail" ).val(),
+                date:$( "input#input_date" ).val(),
+                time:$( "input#input_time" ).val(),
+                message:$( "textarea.input_message" ).val(),
+                people: ''
+            },
+            container = $('.response-content'),
+            success_message = $('#success_text').html(), // get translated text from frontpage
+            error_sending_message = $('#error_sending_text').html();
         $.ajax({
             type: 'POST',
             url: window.AjaxHandler.ajaxurl,
@@ -55,20 +51,23 @@ jQuery(document).ready(function($) {
             cache: false,
             dataType: 'text',
             //async: false,
-            beforeSend: function (response) {
-
-            },
+            beforeSend: function (response) {},
             success: function (response) {
                 var res = parseInt(response[0]);
                 if (res) {
-                    alert(res);
-
+                   $('.callback_pop_up').bPopup({
+                        onOpen: function() { container.html(success_message);},
+                        onClose: function() { container.empty(); }
+                    });
                 } else {
-                    alert('Error');
+                    $('.callback_pop_up').bPopup({
+                        onOpen: function() { container.html(error_sending_message);},
+                        onClose: function() { container.empty(); }
+                    });
                 }
             },
             error: function (response) {
-                alert('Error2')
+                console.log('Error');
             }
         });
     };
