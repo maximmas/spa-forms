@@ -100,7 +100,7 @@ function sfpBookingForm(){
  * Creates custom post type for storage forms's data
  *
  */
-function sfpCreateFormPost(){
+function sfpRegisterCustomPosts(){
     $_post = new SpaFormPostSettings;
     $labels = array(
         'name' 					=> esc_html( $_post->getName() ),
@@ -121,7 +121,7 @@ function sfpCreateFormPost(){
     );
     register_post_type( $_post->getSlag(), $data );
 };
-add_action( 'init', 'sfpCreateFormPost' );
+add_action( 'init', 'sfpRegisterCustomPosts' );
 
 
 
@@ -139,33 +139,74 @@ function spa_sendmail_contact(){
     $spa_date  = sanitize_email( $_POST['date'] );
     $spa_time  = sanitize_email( $_POST['time'] );
     $spa_message = sanitize_text_field( $_POST['message'] );
+  
+   	
+   	$aero_options       = get_option('aero_options');
+    $admin_email        = $aero_options['option_email'];
+    $admin_email        = (!empty($admin_email)) ? $admin_email : get_bloginfo('admin_email');
+    $site_name          = get_bloginfo('name');
 
-  //   $spa_visitor_subject     = sanitize_text_field( $_POST['subject'] );
-  //   $spa_subject             = ( $spa_visitor_subject ) ? $spa_visitor_subject : $spa_subject;
-
-       
-  //   $spa_recepient   = ( empty( $spa_recepient ) ) ? get_bloginfo( 'admin_email' ) : $spa_recepient;
-  //   $spa_message     = ( empty( $spa_visitor_message ) ) ? esc_html__( 'no message' , 'spa' ) : $spa_visitor_message;
-
-  //   $spa_msg = esc_html__( 'Name: ', 'spa' ) .  $spa_visitor_name . '<br><br>';
-  //   $spa_msg .= esc_html__( 'Email: ', 'spa' ) .  $spa_visitor_email . '<br><br>';
-  //   $spa_msg .= esc_html__( 'Message: ', 'spa' ) .  $spa_message;
+    $client_name        = sanitize_text_field($_POST["name"]);
+    $client_phone       = sanitize_text_field($_POST["phone"]);
+    $client_question    = sanitize_text_field($_POST["message"]);
+    $client_email       = sanitize_text_field($_POST["email"]);
     
-  //   add_filter( 'wp_mail_from', 'spa_from_email' );
-  //   add_filter( 'wp_mail_from_name', 'spa_from_name' );
-  //   function spa_from_name( $name ) { return get_bloginfo('name'); };
-  //   function spa_from_email( $email ) {
-  //       $spa_opt              = fw_get_db_settings_option();
-  //       $spa_replace_email    =  ( !empty( $spa_opt['email'] ) ) ? $spa_opt['email'] : get_bloginfo( 'admin_email' );
-  //       return $spa_replace_email; 
-  // };
+    $message = '-------------------<br><br>';
+    $message .= 'Дата вопроса: ' . date_i18n('Y-m-d H:i') . '<br><br>';
+    $message .= 'Контактное лицо: ' . $client_name . '<br><br>';
+    $message .= 'Телефон: ' . $client_phone . '<br><br>';
+    $message .= 'Email: ' . $client_email . '<br><br>';
+    $message .= 'Вопрос: ' . $client_question . '<br><br>';
 
-  //   wp_mail( $spa_recepient, $spa_subject, $spa_msg, "X-Mailer: PHP/" . phpversion() . "\r\n" . "Content-type: text/html; charset=\"UTF-8\"");
-  //     wp_die();   
+    /* собираем текст сообщения для администратора */
+    $message_to_admin = 'Получен новый вопрос на сайте ' . $site_name . '<br>';
+    $message_to_admin .= $message;
+    $subject_to_admin = 'Новый вопрос на сайте ' . $site_name;
 
+    /* собираем текст сообщения для клиента */
+    $message_to_client = 'Спасибо за обращение на сайте ' . $site_name . ' !<br><br>';;
+    $message_to_client .= 'Вы оставили следующую информацию:' . '<br><br>';
+    $message_to_client .= $message;
+    $subject_to_client = 'Подтверждение обращения на сайте ' . get_bloginfo('name');
+
+    
+    sfpCreatePost($message);
+
+    function aero_sender_email( $email ) {
+        $aero_options = get_option('aero_options');
+        $sender_email = $aero_options['option_email']; 
+        $sender_email = ( !empty($sender_email) ) ? $sender_email : get_bloginfo('admin_email');
+        return $sender_email;
+    };
+
+    function aero_sender_name( $name ) {
+        return get_bloginfo('name');
+    };
+    
+    add_filter( 'wp_mail_from', 'aero_sender_email' );
+    add_filter( 'wp_mail_from_name', 'aero_sender_name' );
+
+    wp_mail($admin_email, $subject_to_admin, $message_to_admin, "X-Mailer: PHP/" . phpversion() . "\r\n" . "Content-type: text/html; charset=\"utf-8\"");
+    wp_mail($client_email, $subject_to_client, $message_to_client, "X-Mailer: PHP/" . phpversion() . "\r\n" . "Content-type: text/html; charset=\"utf-8\"");
+    wp_die();
 
     echo "1";
 };
 
+function sfpCreatePost($text)
+{
+	$_post    = new SpaFormPostSettings;
+	$post_type = $_post->getSlag()
+    $data_item = array(
+        'post_title'        => "Customer request " . date_i18n('Y-m-d H:i'),
+        'post_content'      => $text,
+        'post_status'       => 'publish',
+        'post_type'         => $post_type,
+        'post_name'         => 'request' . date_i18n('Y-m-d H:i'),
+        'comment_status'    => 'closed',
+        'ping_status'       => 'closed'
+    );
+    $post_id = wp_insert_post(wp_slash($data_item));
+};
 
 ?>

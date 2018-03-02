@@ -42,7 +42,7 @@ jQuery(document).ready(function($) {
                 people: ''
             },
             container = $('.response-content'),
-            success_message = $('#success_text').html(), // get translated text from frontpage
+            success_message = $('#success_text').html(), 
             error_sending_message = $('#error_sending_text').html();
         $.ajax({
             type: 'POST',
@@ -50,7 +50,6 @@ jQuery(document).ready(function($) {
             data: data,
             cache: false,
             dataType: 'text',
-            //async: false,
             beforeSend: function (response) {},
             success: function (response) {
                 var res = parseInt(response[0]);

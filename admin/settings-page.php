@@ -46,12 +46,16 @@ function sfp_setup_page()
             $sfp_send_ok    = $sfp_options['send_ok'] ? $sfp_options['send_ok'] : 'Thanks for your message!';
             $sfp_send_err   = $sfp_options['send_err'] ? $sfp_options['send_err'] : 'Sendind error! Try again later';
 
+            /* templates */
+            $sfp_mail_temp = $sfp_options['mail_temp'] ? $sfp_options['mail_temp'] : "Thanks for visit $sitename !";
+
             ?>
 
             <div id="tabs">
                 <ul>
-                    <li><a href="#tabs-1"><b><?php esc_html_e( 'Booking form', 'sfp' ); ?></b></a></li>
-                    <li><a href="#tabs-2"><b><?php esc_html_e( 'Response', 'sfp' ); ?></b></a></li>
+                    <li><a href="#tabs-1"><b><?php esc_html_e( 'Form labels', 'sfp' ); ?></b></a></li>
+                    <li><a href="#tabs-2"><b><?php esc_html_e( 'Sending messages', 'sfp' ); ?></b></a></li>
+                    <li><a href="#tabs-3"><b><?php esc_html_e( 'Templates', 'sfp' ); ?></b></a></li>
                 </ul>
                 <!-- Form labels section -->
                 <div id="tabs-1">
@@ -150,6 +154,21 @@ function sfp_setup_page()
                         </tr>
                     </table>
                 </div>
+
+                <!-- Text tempaltes -->
+                <div id="tabs-3">
+                    <table class="form-table">
+                        <tr valign="top">
+                            <th scope="row"><?php esc_html_e( 'Email confirmation', 'sfp' ); ?></th>
+                            <td>
+                                <textarea name="sfp_options[mail_temp]"
+                                       value="<?php echo esc_attr($sfp_mail_temp); ?>"
+                                       placeholder="<?php echo esc_attr($sfp_mail_temp); ?>"
+                                />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
                 
 	            <p class="submit">
     	            <input type="submit" class="button-primary" value="Save Changes"/>
@@ -171,6 +190,7 @@ function sfp_sanitize_options($input)
     $input['more']      = sanitize_text_field( $input['more'] );
     $input['send_ok']   = sanitize_text_field( $input['send_ok'] );
     $input['send_err']  = sanitize_text_field( $input['send_err'] );
+    $input['mail_temp']  = sanitize_text_field( $input['mail_temp'] );
 
     return $input;
 };
