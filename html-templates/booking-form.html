@@ -1,0 +1,68 @@
+<form id="formRes" action="/" method="POST">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row input-row">
+                <div class="col-xs-12 input-wrap">
+                    <label for="input_name" class="label-control">%1$s<span class="label-warn">*</span></label>
+                    <input id="input_name" type="text" required name="field_name" class="form-control">
+                </div>
+            <div class="col-xs-12 input-wrap">
+                <label for="input_mail" class="label-control">%2$s<span class="label-warn">*</span></label>
+                <input id="input_mail" type="email" required name="field_mail" class="form-control">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+      <div class="row input-row">
+        <div class="col-rs col-xs-6 input-wrap">
+          <label for="input_date" class="label-control">%3$s</label>
+          <input id="input_date" data-date-format="mm/dd/yyyy" class="form-control datepicker">
+        </div>
+        <div class="col-rs col-xs-6 input-wrap clockpicker">
+          <label for="input_time" class="label-control">%4$s</label>
+          <input id="input_time" type="text" name="field_time" class="form-control">
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="label-control noCursor">%5$s</div>
+      <div class="row input-row number-of-reversed">
+        <div class="col-rs col-xs-6 input-wrap fzReset">
+          <select id="reservMan">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+          </select>
+        </div>
+        <div class="col-rs col-xs-6 input-wrap">
+          <input id="checkReset" type="checkbox" value="">
+          <label for="checkReset">
+                <i class="fa fa-check"></i>
+                <span class="span">%6$s</span>
+            </label>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="form-group">
+        <div class="label-control noCursor">%7$s</div>
+        <textarea name="field_massage" class="form-control input_message"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="btn-wrap">
+    <button type="submit" class="btn tester btn--darker">%8$s</button>
+  </div>
+  <div class="response_form_text">
+      <span id="error_sending_text">%9$s</span>
+      <span id="success_text">%10$s</span>
+  </div>
+  <div class="callback_pop_up pop_up">
+     <span class="b-close"><i class="glyphicon glyphicon-remove-circle"></i></span>
+     <div class="response-content"></div>
+  </div>
+
+</form>
