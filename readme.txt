@@ -10,3 +10,5 @@ License: GPLv2
 
 SPA Forms plugin descrition text here
 
+To display booking form: do_shortcode( '[sfp_booking_form]' )
+

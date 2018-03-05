@@ -4,14 +4,13 @@ jQuery(document).ready(function($) {
 
      $('#formRes button.tester').on('click', function(e){
         e.preventDefault();
-        let is_valid = formValidator();
-        // let is_valid = 1;
+        let is_valid = form_validator();
         if ( is_valid ){
-            handlerBookingForm();            
+            handler_booking_form();            
         };
      });
 
-    function formValidator() {
+    function form_validator() {
         let name_el = $( "input#input_name" ),
             email_el = $( "input#input_mail" ),
             name    = name_el.val(),
@@ -31,7 +30,11 @@ jQuery(document).ready(function($) {
         };
     };
 
-    function handlerBookingForm() {
+    function handler_booking_form() {
+
+        let more = $('input#checkReset:checked').length;   
+        let people = ( more ) ? 'More than 6 people' : $( "select#reservMan" ).val();
+
         let data = {
                 action: 'booking',
                 name: $( "input#input_name" ).val(),
@@ -39,7 +42,7 @@ jQuery(document).ready(function($) {
                 date:$( "input#input_date" ).val(),
                 time:$( "input#input_time" ).val(),
                 message:$( "textarea.input_message" ).val(),
-                people: ''
+                people: people,
             },
             container = $('.response-content'),
             success_message = $('#success_text').html(), 
