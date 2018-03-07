@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: SPA Forms
-Plugin URI: 
+Plugin URI: https://github.com/maximmas/spa-forms
 Description: Forms handler for the Royal Spa WordPress Theme
 Version: 1.0
 Author: Maxim Maslov
@@ -46,8 +46,6 @@ function sfp_scripts() {
     wp_enqueue_script( 'sfp-bootstrap-datepicker', plugin_dir_url( __FILE__ ) . '/includes/js/bootstrap-datepicker.min.js', array('sfp-bootstrap'), false, true );
     wp_enqueue_script( 'sfp-barrating', plugin_dir_url( __FILE__ ) . '/includes/js/jquery.barrating.min.js', array('jquery'), false, true );
     wp_enqueue_script( 'sfp-bootstrap-clockpicker', plugin_dir_url( __FILE__ ) . '/includes/js/bootstrap-clockpicker.min.js', array('sfp-bootstrap'), false, true );
-
-    // AJAX handler
     wp_localize_script( 'jquery', 'SFP_Ajax_Handler', array( 'sfp_ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
 
     
