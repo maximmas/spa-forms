@@ -39,26 +39,23 @@ require_once( plugin_dir_path( __FILE__ ) . '/admin/settings-page.php' );
  *
  */
 function sfp_scripts() {
+    
+    wp_enqueue_script( 'sfp-script', plugin_dir_url( __FILE__ ) . '/includes/js/handler.js', array( 'jquery', 'sfp-bpopup' ) );
+    wp_enqueue_script( 'sfp-bpopup', plugin_dir_url( __FILE__ ) . '/includes/js/jquery.bpopup.min.js', array('jquery') );
+    wp_enqueue_script( 'sfp-bootstrap', plugin_dir_url( __FILE__ ) . '/includes/js/bootstrap.min.js',  array() );
+    wp_enqueue_script( 'sfp-bootstrap-datepicker', plugin_dir_url( __FILE__ ) . '/includes/js/bootstrap-datepicker.min.js', array('sfp-bootstrap'), false, true );
+    wp_enqueue_script( 'sfp-barrating', plugin_dir_url( __FILE__ ) . '/includes/js/jquery.barrating.min.js', array('jquery'), false, true );
+    wp_enqueue_script( 'sfp-bootstrap-clockpicker', plugin_dir_url( __FILE__ ) . '/includes/js/bootstrap-clockpicker.min.js', array('sfp-bootstrap'), false, true );
 
-    $script_url = plugins_url( '/includes/js/handler.js', __FILE__ );
-    $style_url  = plugins_url( '/includes/css/style.css', __FILE__ );
-    $bpopup_url = plugins_url( '/includes/js/jquery.bpopup.min.js', __FILE__ );
+    // AJAX handler
+    wp_localize_script( 'jquery', 'SFP_Ajax_Handler', array( 'sfp_ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
 
+    
+    wp_enqueue_style( 'sfp-bootstrap', plugin_dir_url( __FILE__ ) . '/includes/css/bootstrap.min.css' ); 
+    wp_enqueue_style( 'sfp-bootstrap-clockpicker', plugin_dir_url( __FILE__ ) . '/includes/css/bootstrap-clockpicker.min.css' );
+    wp_enqueue_style( 'sfp-bootstrap-datepicker3', plugin_dir_url( __FILE__ ) . '/includes/css/bootstrap-datepicker3.min.css' );
 
-    wp_enqueue_script( 'sfp-script', $script_url, array( 'jquery', 'sfp-bpopup' ) );
-    wp_enqueue_script( 'sfp-bpopup', $bpopup_url, array('jquery') );
-
-    // wp_enqueue_script( 'bootstrap', SPA_THEME_DIR . '/js/bootstrap.min.js',  );
-    // wp_enqueue_script( 'bootstrap-datepicker', SPA_THEME_DIR . '/js/bootstrap-datepicker.min.js', $libs, false, true );
-    // wp_enqueue_script( 'bootstrap-clockpicker', SPA_THEME_DIR . '/js/bootstrap-clockpicker.min.js', $libs, false, true );
-
-    wp_enqueue_style( 'sfp-style', $style_url );
-
-    // wp_enqueue_style( 'bootstrap', SPA_THEME_DIR . '/libs/bootstrap.min.css' ); 
-    // wp_enqueue_style( 'bootstrap-clockpicker', SPA_THEME_DIR . '/libs/bootstrap-clockpicker.min.css' );
-    // wp_enqueue_style( 'bootstrapdatepicker3', SPA_THEME_DIR . '/libs/bootstrap-datepicker3.min.css' );
-
-
+    wp_enqueue_style( 'sfp-style', plugin_dir_url( __FILE__ ) . '/includes/css/style.css' );
 };
 
 add_action( 'wp_enqueue_scripts', 'sfp_scripts' );
@@ -71,6 +68,7 @@ function sfp_admin_scripts()
     wp_enqueue_script( 'jquery-ui-accordion', array('jquery', 'jquery-ui-core') );
     wp_enqueue_script( 'jquery-ui-sortable', array('jquery', 'jquery-ui-core') );
     wp_enqueue_style( 'jquery-ui-style', plugin_dir_url( __FILE__ ) . 'admin/libs/jquery-ui.min.css' );
+
     wp_enqueue_style( 'scf-admin-style', plugin_dir_url( __FILE__ ) . 'admin/libs/scf-admin-style.css' ) ;
 };
 add_action( 'admin_enqueue_scripts', 'sfp_admin_scripts' );
@@ -169,9 +167,9 @@ function sfp_sendmail_contact(){
     sfp_create_post( $message_to_admin );
     
     // replace name / email   
-    sfp_replace_sender_info( $admin_email );
+    sfp_replace_sender_info();
     
-     wp_mail( $admin_email,
+    wp_mail( $admin_email,
               $subject_to_admin,
               $message_to_admin,
               "X-Mailer: PHP/" . phpversion() . "\r\n" . "Content-type: text/html; charset=\"utf-8\"");
@@ -185,14 +183,16 @@ function sfp_sendmail_contact(){
    
 };
 
-function sfp_replace_sender_info( $admin_email ){
+function sfp_replace_sender_info(){
 
     add_filter( 'wp_mail_from', function( $email ){ 
-        return $admin_email; 
+        $sfp_email = ( !empty( $options['admin_email'] ) ) ? $options['admin_email'] : get_bloginfo( 'admin_email' );
+        return $sfp_email; 
     });
     
-    add_filter( 'wp_mail_from_name', function( $name )
+    add_filter( 'wp_mail_from_name', function( $name ){
         return get_bloginfo('name');
+    
     });    
 };
 

@@ -1,13 +1,14 @@
+ <div class="form-wrap form-res">
 <form id="formRes" action="/" method="POST">
     <div class="row">
         <div class="col-md-12">
             <div class="row input-row">
                 <div class="col-xs-12 input-wrap">
-                    <label for="input_name" class="label-control">%1$s<span class="label-warn">*</span></label>
+                    <label for="input_name" class="sfp-label label-control">%1$s<span class="label-warn">*</span></label>
                     <input id="input_name" type="text" required name="field_name" class="form-control">
                 </div>
             <div class="col-xs-12 input-wrap">
-                <label for="input_mail" class="label-control">%2$s<span class="label-warn">*</span></label>
+                <label for="input_mail" class="sfp-label label-control">%2$s<span class="label-warn">*</span></label>
                 <input id="input_mail" type="email" required name="field_mail" class="form-control">
             </div>
         </div>
@@ -15,11 +16,11 @@
     <div class="col-md-12">
       <div class="row input-row">
         <div class="col-rs col-xs-6 input-wrap">
-          <label for="input_date" class="label-control">%3$s</label>
-          <input id="input_date" data-date-format="mm/dd/yyyy" class="form-control datepicker">
+          <label for="input_date" class="sfp-label label-control">%3$s</label>
+          <input id="input_date" type="text" data-date-format="mm/dd/yyyy" class="form-control datepicker">
         </div>
         <div class="col-rs col-xs-6 input-wrap clockpicker">
-          <label for="input_time" class="label-control">%4$s</label>
+          <label for="input_time" class="sfp-label label-control">%4$s</label>
           <input id="input_time" type="text" name="field_time" class="form-control">
         </div>
       </div>
@@ -39,7 +40,7 @@
         </div>
         <div class="col-rs col-xs-6 input-wrap">
           <input id="checkReset" type="checkbox" value="1">
-          <label for="checkReset">
+          <label for="checkReset" class="sfp-label">
                 <i class="fa fa-check"></i>
                 <span class="span">%6$s</span>
             </label>
@@ -64,5 +65,5 @@
      <span class="b-close"><i class="glyphicon glyphicon-remove-circle"></i></span>
      <div class="response-content"></div>
   </div>
-
 </form>
+</div>

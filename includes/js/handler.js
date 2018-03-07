@@ -2,6 +2,28 @@
 
 jQuery(document).ready(function($) {
 
+
+    $(".datepicker").datepicker({
+        orientation: "bottom",
+        keyboardNavigation: true,
+        format: "mm/dd/yyyy"
+    });
+
+    $('.clockpicker').clockpicker({
+        autoclose: true
+    });
+
+    // form Reservation
+    $('#reservMan, #mdReservMan').barrating({
+        hoverState: false
+    });
+    var form = $("#formRes #checkReset");
+    var mdForm = $("#mdFormRes #mdCheckReset");
+
+    form.on('click', function() {
+       $('.br-widget').toggleClass('disable');
+    });
+ 
      $('#formRes button.tester').on('click', function(e){
         e.preventDefault();
         let is_valid = form_validator();
@@ -49,7 +71,7 @@ jQuery(document).ready(function($) {
             error_sending_message = $('#error_sending_text').html();
         $.ajax({
             type: 'POST',
-            url: window.AjaxHandler.ajaxurl,
+            url: window.SFP_Ajax_Handler.sfp_ajaxurl,
             data: data,
             cache: false,
             dataType: 'text',
@@ -68,9 +90,7 @@ jQuery(document).ready(function($) {
                     });
                 }
             },
-            error: function (response) {
-                console.log('Error');
-            }
+            error: function (response) {}
         });
     };
 });
