@@ -29,10 +29,11 @@ Domain Path: /languages
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+require_once ( plugin_dir_path( __FILE__ ) . '/includes/classes/class-sfp-constants.php' );
+require_once ( plugin_dir_path( __FILE__ ) . '/includes/classes/class-sfp-post-settings.php' );
+require_once ( plugin_dir_path( __FILE__ ) . '/admin/settings-page.php' );
 define ( "SFP_BOOKING_FORM", plugin_dir_path( __FILE__ ) . '/forms-templates/booking-form.html' );
 
-require_once ( plugin_dir_path( __FILE__ ) . '/includes/classes/class-sfp-post-settings.php' );
-require_once( plugin_dir_path( __FILE__ ) . '/admin/settings-page.php' );
 
 /**
  * Enqueue scripts and styles
@@ -84,9 +85,7 @@ add_action( 'admin_enqueue_scripts', 'sfp_admin_scripts' );
 function sfp_booking_form(){
     $form_template   = file_get_contents( SFP_BOOKING_FORM, true );
     $options    = get_option( 'sfp_options' );
-    //fw_print($options);
-
-    $form = sprintf( $form_template,
+    $form       = sprintf( $form_template,
                         $options['name'],
                         $options['email'],
                         $options['date'],
@@ -99,8 +98,10 @@ function sfp_booking_form(){
                         $options['send_ok']
                 );
            
-    return $form;
+    // return $form;
+    echo wp_kses( $form, Sfp_Constants::get_allowed_tags() );
 };
+
 
 /**
  * Register shortcodet to display form
@@ -137,7 +138,10 @@ function sfp_register_custom_posts(){
 add_action( 'init', 'sfp_register_custom_posts' );
 
 
-// sendmail handler
+/**
+ * Mailer
+ *
+ */
 add_action( 'wp_ajax_booking', 'sfp_sendmail_contact' );
 add_action( 'wp_ajax_nopriv_booking', 'spa_sendmail_contact' );
 function sfp_sendmail_contact(){
@@ -194,7 +198,7 @@ function sfp_replace_sender_info(){
     });    
 };
 
-function sfp_create_post($text)
+function sfp_create_post( $text )
 {
 	$_post    = new Sfp_Post_Settings;
 	$post_type = $_post->get_postname();
